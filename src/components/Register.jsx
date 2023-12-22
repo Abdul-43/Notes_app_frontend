@@ -16,7 +16,7 @@ export const Signup = (props) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/auth/createuser`,
+        `https://notes-app-backend-vlll.onrender.com/api/auth/createuser`,
         { name, email, password },
         {
           headers: {
