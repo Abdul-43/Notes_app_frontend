@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import NoteContext from "./NoteContext";
 import axios from "axios"; // Import axios
+import { api } from "../global";
 
 const NoteState = (props) => {
-  const host = "http://localhost:8000";
+  const host = api;
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {

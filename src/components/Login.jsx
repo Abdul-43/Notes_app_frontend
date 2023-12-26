@@ -1,49 +1,61 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import login from "../assets/login.png"
+import login from "../assets/login.png";
+import { api } from "../global";
+import axios from "axios";
 export const Login = (props) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:8000/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: credentials.email,
-        password: credentials.password,
-      }),
-    });
-    const json = await response.json();
-    console.log(json);
-    if (json.success) {
-      // save the auth token and redirect
-      localStorage.setItem("token", json.authtoken);
-      //    const sendSubmit = ()=>{
-      navigate("/notes");
-      props.showAlert("Logged In", "success");
-      // }
-    } else {
-      props.showAlert("Don't have an account", "danger");
+    console.log("log in");
+    try {
+      const response = await axios.post(
+        `${api}/api/auth/login`,
+        {
+          email: credentials.email,
+          password: credentials.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*", // Allow the desired origin
+          },
+        }
+      );
+
+      const json = response.data;
+      console.log(json);
+
+      if (json.success) {
+        localStorage.setItem("token", json.authtoken);
+        navigate("/notes");
+        props.showAlert("Logged In", "success");
+      } else {
+        props.showAlert("Don't have an account", "danger");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      props.showAlert("Error logging in", "danger");
     }
   };
+
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
+
   return (
     <div className="h100  container">
       <div className="col-1"></div>
       <div className="col-4 ">
-        <img src={login} className="login-img"/>
+        <img src={login} className="login-img" />
       </div>
       <div className="col-2"></div>
       <form className="col-4" onSubmit={handleSubmit}>
         <div>
           <div className=" text-primary my-4 text-center">
-            <h1>SKYNotE</h1>
+            <h1>Cloud Notes</h1>
           </div>
           <div className="text-dark my-4 text-center">
             <h5>Log in to Your Notebook</h5>

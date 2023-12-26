@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import register from "../assets/registerr.jpg"
+import { api } from "../global";
 export const Signup = (props) => {
   const [credentials, setCredentials] = useState({
     name: "",
@@ -16,12 +17,13 @@ export const Signup = (props) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/auth/createuser`,
+        `${api}/api/auth/createuser`,
         { name, email, password },
         {
           headers: {
             "Content-Type": "application/json",
           },
+          
         }
       );
       const json = response.data;
@@ -51,7 +53,7 @@ export const Signup = (props) => {
       <form className="col-4" onSubmit={handleSubmit}>
         <div>
           <div className=" text-primary my-4 text-center">
-            <h1>SKYNotE</h1>
+            <h1>Cloud Notes</h1>
           </div>
           <div className="text-dark my-4 text-center">
             <h5> Creat Your Account on SKYNotE</h5>
